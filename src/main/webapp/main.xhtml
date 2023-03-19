@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<ui:composition template="WEB-INF/template_header.xhtml">
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="style.css"/>
+        <title>Совунья main</title>
+    </ui:define>
+    <ui:define name="main">
+        <div class="main" style="justify-content: center">
+            <div class="task">
+                <canvas id="graph" width="280" height="280" style="border:1px solid #000000;"></canvas>
+            </div>
+            <div class="panel">
+                <h:form id="form">
+                    <div class="button-group" style="display:flex; flex-direction: column; border: none;">
+                        <h2>X:</h2>
+                        <div class="button-group" style="display: flex; flex-direction: column;">
+                            <h:commandButton type="button" id="x-5" value="-5"
+                                             styleClass="button_x active"></h:commandButton>
+                            <h:commandButton type="button" id="x-4" value="-4" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x-3" value="-3" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x-2" value="-2" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x-1" value="-1" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x0" value="0" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x1" value="1" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x2" value="2" styleClass="button_x"></h:commandButton>
+                            <h:commandButton type="button" id="x3" value="3" styleClass="button_x"></h:commandButton>
+                            <h:panelGroup styleClass="input-form__hidden_x">
+                                <h:inputHidden value="#{dataBean.point.x}">
+                                    <f:validateRequired/>
+                                    <f:validateLongRange minimum="-5" maximum="3"/>
+                                </h:inputHidden>
+                            </h:panelGroup>
+                        </div>
+
+
+                    </div>
+                    <div class="input-Y-group" style="flex-direction: column; display: flex">
+                        <h2>Y:</h2>
+                        <h:inputText autocomplete="off" id="inputY" required="true"
+                                     a:placeholder="Введите число от -3 до 5" size="25" value="#{dataBean.point.y}">
+                            <f:validateRequired/>
+                            <f:validateDoubleRange maximum="5" minimum="-3"/>
+                        </h:inputText>
+                        <div><h:outputLabel id="y-warning" style="display: none"
+                                            value="Неверное значение"></h:outputLabel>
+                        </div>
+                    </div>
+                    <div class="input-R-group" style="display: flex; flex-direction: column">
+                        <h2>R:</h2>
+                        <h:inputText autocomplete="off" id="inputR" required="true"
+                                     a:placeholder="Введите число от 1 до 4" size="25" value="#{dataBean.point.r}">
+                            <f:validateRequired/>
+                            <f:validateDoubleRange maximum="4" minimum="1"/>
+                        </h:inputText>
+                        <div><h:outputLabel id="r-warning" style="display: none"
+                                            value="Неверное значение"></h:outputLabel>
+                        </div>
+                    </div>
+                    <div class="service-button-group">
+                        <h:commandButton type="button" id="send-button" value="Отправить" styleClass="service_button"
+                                         action="#{dataBean.addPoint}">
+                            <f:ajax execute="@form" render="result-table"
+                                    oncomplete="console.log('ajax completed')" onevent="hello"></f:ajax>
+                        </h:commandButton>
+                        <h:commandButton id="clear-button" type="button" value="Отчистить" styleClass="service_button"
+                                         action="#{dataBean.clearPoints}">
+                            <f:ajax process="@form"  update="result-table" immediate="true" ></f:ajax>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+            <div id="table_block" class="panel">
+                <h:dataTable id="result-table" value="#{dataBean.points}" var="point">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        <h:outputText value="#{point.x}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        <h:outputText value="#{point.y}"/>
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        <h:outputText value="#{point.r}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Result</f:facet>
+                        <h:outputText value="#{point.result}"/>
+                    </h:column>
+                </h:dataTable>
+
+            </div>
+
+
+        </div>
+        <div>
+            <h:button styleClass="index-menu-button-to-main" outcome="goToIndex" value="Отъехали!">
+            </h:button>
+        </div>
+        <h:outputScript library="js" name="graph.js"></h:outputScript>
+        <h:outputScript library="js" name="validator.js"></h:outputScript>
+    </ui:define>
+
+
+</ui:composition>
+
+
+<f:view>
+
+    <h:outputLabel value="Hello, world"/>
+</f:view>
+</html>
